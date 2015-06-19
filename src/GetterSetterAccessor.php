@@ -15,7 +15,7 @@ use InvalidArgumentException;
  *       ->initially( function() {
  *           return new Length( 20 );
  *       } )
- *       ->run( $value )
+ *       ->getOrSet( $value )
  *   }
  * }
  *

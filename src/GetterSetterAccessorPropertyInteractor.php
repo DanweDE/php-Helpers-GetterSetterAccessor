@@ -84,7 +84,7 @@ class GetterSetterAccessorPropertyInteractor {
 	 * @param mixed $value
 	 * @return mixed Getter value or subject instance (initially given to the constructor).
 	 */
-	public function run( $value ) {
+	public function getOrSet( $value ) {
 		if( $value === null ) {
 			return $this->getValue();
 		}
@@ -98,7 +98,7 @@ class GetterSetterAccessorPropertyInteractor {
 		if( $returnValue === null && $this->defaultReturningCallback !== null ) {
 			$returnValue = call_user_func( $this->defaultReturningCallback );
 			if( $returnValue !== null ) {
-				$this->run( $returnValue );
+				$this->getOrSet( $returnValue );
 			}
 		}
 		return $returnValue;

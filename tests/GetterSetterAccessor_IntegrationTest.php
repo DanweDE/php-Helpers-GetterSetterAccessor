@@ -68,7 +68,7 @@ class GetterSetterAccessor_IntegrationTest extends \PHPUnit_Framework_TestCase {
 							return $initialValue;
 						} );
 					}
-					return $propGetSet->run( $value );
+					return $propGetSet->getOrSet( $value );
 				} ) );
 		}
 

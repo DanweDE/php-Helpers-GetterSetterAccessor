@@ -11,7 +11,7 @@ namespace Danwe\Helpers\Tests\TestHelpers;
  */
 class GetterSetterObject {
 
-	// Properties are at least protected so they accessible in mocks:
+	// Properties are at least protected so they are accessible in a mocks "returnsCallback":
 	protected $someBoolean;
 	protected $someInteger;
 	public $someDouble;

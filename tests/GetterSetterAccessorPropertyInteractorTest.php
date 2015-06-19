@@ -67,14 +67,14 @@ class GetterSetterAccessorPropertyInteractorTest extends \PHPUnit_Framework_Test
 			$instance,
 			$property
 		);
-		$this->assertInternalType( 'null', $getSet->run( null ),
-			"run( null ) (getter) returns null initially" );
+		$this->assertInternalType( 'null', $getSet->getOrSet( null ),
+			"getOrSet( null ) (getter) returns null initially" );
 
-		$this->assertSame( $instance, $getSet->run( $value ),
-			'run( $value ) (setter) returns self reference' );
+		$this->assertSame( $instance, $getSet->getOrSet( $value ),
+			'getOrSet( $value ) (setter) returns self reference' );
 
-		$this->assertSame( $value, $getSet->run( null ),
-			"run( null ) (getter) returns value previously set" );
+		$this->assertSame( $value, $getSet->getOrSet( null ),
+			"getOrSet( null ) (getter) returns value previously set" );
 	}
 
 	/**
@@ -90,8 +90,8 @@ class GetterSetterAccessorPropertyInteractorTest extends \PHPUnit_Framework_Test
 		$getSet->initially( function() use( $value ) {
 			return $value;
 		} );
-		$this->assertSame( $value, $getSet->run( null ),
-			"run( null ) (getter) returns value defined as default" );
+		$this->assertSame( $value, $getSet->getOrSet( null ),
+			"getOrSet( null ) (getter) returns value defined as default" );
 	}
 
 	public function testRunCanAccessPrivateInstanceProperty() {
@@ -109,8 +109,8 @@ class GetterSetterAccessorPropertyInteractorTest extends \PHPUnit_Framework_Test
 			"Test subject's \"$privateProperty\" property is private"
 		);
 
-		$this->assertSame( $instance, $getSet->run( $testValue ),
-			'run( $value ) (setter) returns self reference' );
+		$this->assertSame( $instance, $getSet->getOrSet( $testValue ),
+			'getOrSet( $value ) (setter) returns self reference' );
 
 		$this->assertSame( $testValue, $instance->getPrivateValue() );
 	}

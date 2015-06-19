@@ -21,6 +21,8 @@ class GetterSetterObject {
 
 	// For testing accessibility of privates:
 	private $privateValue;
+	protected $protectedValue;
+	public $publicValue;
 
 	public function __construct( $defaultForSomeObjectGetter = null ) {
 		$this->someObject = $defaultForSomeObjectGetter;

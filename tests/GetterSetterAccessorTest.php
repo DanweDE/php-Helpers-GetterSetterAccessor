@@ -15,7 +15,7 @@ use Danwe\Helpers\GetterSetterAccessor;
 class GetterSetterAccessorTest extends \PHPUnit_Framework_TestCase {
 
 	/**
-	 * @dataProvider objectsProvider
+	 * @dataProvider objectsAndObjectsPropertyProvider
 	 */
 	public function testConstruction( $object ) {
 		$this->assertInstanceOf(
@@ -34,20 +34,16 @@ class GetterSetterAccessorTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @dataProvider objectsProvider
+	 * @dataProvider objectsAndObjectsPropertyProvider
 	 */
-	public function testProperty( $object ) {
+	public function testProperty( $object, $objectsProperty ) {
 		$getSet = new GetterSetterAccessor( $object );
 
-		foreach( static::propertyNamesProvider() as $case ) {
-			list( $propertyName ) = $case;
-
-			$this->assertInstanceOf(
-				'Danwe\Helpers\GetterSetterAccessorPropertyInteractor',
-				$getSet->property( $propertyName ),
-				"property( '$propertyName' ) returns a GetterSetterAccessorPropertyInteractor instance"
-			);
-		}
+		$this->assertInstanceOf(
+			'Danwe\Helpers\GetterSetterAccessorPropertyInteractor',
+			$getSet->property( $objectsProperty ),
+			"property( '$objectsProperty' ) returns a GetterSetterAccessorPropertyInteractor instance"
+		);
 	}
 
 	/**
@@ -62,27 +58,28 @@ class GetterSetterAccessorTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Returns a random object for a case's first parameter.
-	 *
-	 * @return array( array( mixed $object ), ... )
+	 * @dataProvider objectsAndObjectsPropertyProvider
 	 */
-	public static function objectsProvider() {
-		return array_chunk( array(
-			new GetterSetterTestObject(),
-			new \DateTime(),
-			new \ReflectionClass( __CLASS__ )
-		), 1 );
+	public function testAccess( $object, $objectsProperty ) {
+		$this->assertInstanceOf(
+			'Danwe\Helpers\GetterSetterAccessorPropertyInteractor',
+			GetterSetterAccessor::access( $object, $objectsProperty ),
+			"GetterSetterAccessor::access( \$object, '$objectsProperty' ) returns a "
+				. "GetterSetterAccessorPropertyInteractor instance"
+		);
 	}
 
 	/**
-	 * @return array( array( string $propertyName ), ... )
+	 * Returns a random object for a case's first parameter and a property of that object as second.
+	 *
+	 * @return array( array( object $object, $objectsProperty ), ... )
 	 */
-	public static function propertyNamesProvider() {
-		return array_chunk( array(
-			'foo',
-			'bar',
-			'anotherProperty'
-		), 1 );
+	public static function objectsAndObjectsPropertyProvider() {
+		return array(
+			'public property' => array( new GetterSetterTestObject(), 'someDouble' ),
+			'protected property' => array( new GetterSetterTestObject(), 'protectedValue' ),
+			'private property' => array( new GetterSetterTestObject(), 'privateValue' ),
+		);
 	}
 }
 

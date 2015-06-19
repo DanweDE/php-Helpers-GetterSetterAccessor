@@ -3,7 +3,6 @@ namespace Danwe\Helpers\Tests;
 
 use Danwe\Helpers\Tests\TestHelpers\GetterSetterObject as GetterSetterTestObject;
 use Danwe\Helpers\GetterSetterAccessorPropertyInteractor;
-use Danwe\Helpers\GetterSetterAccessor;
 
 /**
  * @covers Danwe\Helpers\GetterSetterAccessorPropertyInteractor
@@ -16,12 +15,12 @@ use Danwe\Helpers\GetterSetterAccessor;
 class GetterSetterAccessorPropertyInteractorTest extends \PHPUnit_Framework_TestCase {
 
 	/**
-	 * @dataProvider objectsProvider
+	 * @dataProvider objectsAndObjectsPropertyProvider
 	 */
-	public function testConstruction( $object ) {
+	public function testConstruction( $object, $property ) {
 		$this->assertInstanceOf(
 			'Danwe\Helpers\GetterSetterAccessorPropertyInteractor',
-			new GetterSetterAccessorPropertyInteractor( $object, 'someProperty' )
+			new GetterSetterAccessorPropertyInteractor( $object, $property )
 		);
 	}
 
@@ -30,8 +29,8 @@ class GetterSetterAccessorPropertyInteractorTest extends \PHPUnit_Framework_Test
 	 *
 	 * @expectedException InvalidArgumentException
 	 */
-	public function testConstructionFirstParameterWithNonObjectValues( $value ) {
-		new GetterSetterAccessorPropertyInteractor( $value, 'someProperty' );
+	public function testConstructionFirstParameterWithNonObjectValues( $nonObject ) {
+		new GetterSetterAccessorPropertyInteractor( $nonObject, 'someProperty' );
 	}
 
 	/**
@@ -39,12 +38,14 @@ class GetterSetterAccessorPropertyInteractorTest extends \PHPUnit_Framework_Test
 	 *
 	 * @expectedException InvalidArgumentException
 	 */
-	public function testConstructionSecondParameterWithNonStringValues( $value ) {
-		new GetterSetterAccessorPropertyInteractor( new \DateTime(), $value );
+	public function testConstructionSecondParameterWithNonStringValues( $nonExistentProperty ) {
+		$object = new \DateTime();
+		new GetterSetterAccessorPropertyInteractor( $object, $nonExistentProperty );
 	}
 
 	public function testInitially() {
-		$this->newInstance()->initially( function() { return 42; } );
+		$instance = $this->newInstance();
+		$this->assertSame( $instance, $instance->initially( function() { return 42; } ) );
 	}
 
 	/**
@@ -118,20 +119,20 @@ class GetterSetterAccessorPropertyInteractorTest extends \PHPUnit_Framework_Test
 	 * @return GetterSetterAccessorPropertyInteractor
 	 */
 	protected function newInstance() {
-		return new GetterSetterAccessorPropertyInteractor( new GetterSetterTestObject(), 'someInt' );
+		return new GetterSetterAccessorPropertyInteractor( new GetterSetterTestObject(), 'someString' );
 	}
 
 	/**
-	 * Returns a random object for a case's first parameter.
+	 * Returns a random object for a case's first parameter and a property of that object as second.
 	 *
-	 * @return array( array( mixed $object ), ... )
+	 * @return array( array( object $object, $objectsProperty ), ... )
 	 */
-	public static function objectsProvider() {
-		return array_chunk( array(
-			new GetterSetterTestObject(),
-			new \DateTime(),
-			new \ReflectionClass( __CLASS__ )
-		), 1 );
+	public static function objectsAndObjectsPropertyProvider() {
+		return array(
+			'public property' => array( new GetterSetterTestObject(), 'someDouble' ),
+			'protected property' => array( new GetterSetterTestObject(), 'protectedValue' ),
+			'private property' => array( new GetterSetterTestObject(), 'privateValue' ),
+		);
 	}
 }
 

@@ -34,7 +34,7 @@ class GetterSetterAccessor {
 	protected $instance;
 
 	/**
-	 * @param mixed $instance The subject object to operate on.
+	 * @param object $instance The subject object to operate on.
 	 *
 	 * @throws InvalidArgumentException If $instance is no object.
 	 */
@@ -53,5 +53,20 @@ class GetterSetterAccessor {
 	 */
 	public function property( $propertyName ) {
 		return new GetterSetterAccessorPropertyInteractor( $this->instance, $propertyName );
+	}
+
+	/**
+	 * Equivalent to
+	 *   ( new GetterSetterAccessor( $instance ) )->property( $propertyName ) ...
+	 * but usable with PHP 5.3 while the above is not.
+	 *
+	 * @param object $instance
+	 * @param string $propertyName
+	 *
+	 * @return mixed
+	 */
+	public static function access( $instance, $propertyName ) {
+		$accessor = new static( $instance );
+		return $accessor->property( $propertyName );
 	}
 }

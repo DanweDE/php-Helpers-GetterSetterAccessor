@@ -39,10 +39,11 @@ class GetterSetterAccessorPropertyInteractor {
 
 	/**
 	 * @param mixed $instance The subject object to operate on.
-	 * @param string $propertyName
+	 * @param string $propertyName Can even be the name of a private property.
 	 *
 	 * @throws InvalidArgumentException If $instance is no object.
 	 * @throws InvalidArgumentException If $propertyName is no string.
+	 * @throws GetterSetterAccessorIllegalPropertyException If $instance has no property $propertyName.
 	 */
 	public function __construct( $instance, $propertyName ) {
 		if( ! is_object( $instance ) ) {
@@ -53,6 +54,7 @@ class GetterSetterAccessorPropertyInteractor {
 		}
 		$this->instance = $instance;
 		$this->propertyName = $propertyName;
+		$this->reflectionProperty = $this->newAccessibleReflectionProperty();
 	}
 
 	/**
@@ -91,7 +93,7 @@ class GetterSetterAccessorPropertyInteractor {
 	}
 
 	protected function getValue() {
-		$returnValue = $this->getAccessibleReflectionProperty()->getValue( $this->instance );
+		$returnValue = $this->reflectionProperty->getValue( $this->instance );
 
 		if( $returnValue === null && $this->defaultReturningCallback !== null ) {
 			$returnValue = call_user_func( $this->defaultReturningCallback );
@@ -103,7 +105,7 @@ class GetterSetterAccessorPropertyInteractor {
 	}
 
 	protected function setValue( $value ) {
-		$this->getAccessibleReflectionProperty()->setValue( $this->instance, $value );
+		$this->reflectionProperty->setValue( $this->instance, $value );
 	}
 
 	/**
@@ -111,10 +113,7 @@ class GetterSetterAccessorPropertyInteractor {
 	 *
 	 * @throws GetterSetterAccessorIllegalPropertyException
 	 */
-	private function getAccessibleReflectionProperty() {
-		if( $this->reflectionProperty ) {
-			return $this->reflectionProperty;
-		}
+	private function newAccessibleReflectionProperty() {
 		$className = get_class( $this->instance );
 		$reflectionClass = new ReflectionClass( $className );
 
@@ -126,8 +125,6 @@ class GetterSetterAccessorPropertyInteractor {
 		}
 
 		$reflectionProperty->setAccessible( true );
-
-		$this->reflectionProperty = $reflectionProperty;
 		return $reflectionProperty;
 	}
 }

@@ -61,10 +61,10 @@ class GetterSetterAccessor_IntegrationTest extends \PHPUnit_Framework_TestCase {
 		foreach( $initialValues as $valueMethod => $initialValue ) {
 			$mockedObject->method( $valueMethod )
 				->will( $this->returnCallback( function( $value = null ) use( $getSet, $valueMethod, $initialValue ) {
-					$propGetSet = $getSet->access( $valueMethod );
+					$propGetSet = $getSet->property( $valueMethod );
 
 					if( $initialValue ) {
-						$propGetSet->defaultValue( function() use( $initialValue ) {
+						$propGetSet->initially( function() use( $initialValue ) {
 							return $initialValue;
 						} );
 					}

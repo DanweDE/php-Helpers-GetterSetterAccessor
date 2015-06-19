@@ -36,7 +36,7 @@ class GetterSetterAccessorTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * @dataProvider objectsProvider
 	 */
-	public function testAccess( $object ) {
+	public function testProperty( $object ) {
 		$getSet = new GetterSetterAccessor( $object );
 
 		foreach( static::propertyNamesProvider() as $case ) {
@@ -44,8 +44,8 @@ class GetterSetterAccessorTest extends \PHPUnit_Framework_TestCase {
 
 			$this->assertInstanceOf(
 				'Danwe\Helpers\GetterSetterAccessorPropertyInteractor',
-				$getSet->access( $propertyName ),
-				"access( '$propertyName' ) returns a GetterSetterAccessorPropertyInteractor instance"
+				$getSet->property( $propertyName ),
+				"property( '$propertyName' ) returns a GetterSetterAccessorPropertyInteractor instance"
 			);
 		}
 	}
@@ -53,12 +53,12 @@ class GetterSetterAccessorTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * @dataProvider Danwe\DataProviders\DifferentTypesValues::oneOfEachTypeProvider
 	 */
-	public function testAccessWithNonStringValues( $value ) {
+	public function testPropertyWithNonStringValues( $value ) {
 		$getSet = new GetterSetterAccessor( new \DateTime() );
 
 		$this->setExpectedException( 'InvalidArgumentException' );
 
-		$getSet->access( $value );
+		$getSet->property( $value );
 	}
 
 	/**

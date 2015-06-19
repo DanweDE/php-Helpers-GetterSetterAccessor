@@ -11,8 +11,8 @@ use InvalidArgumentException;
  * class Foo {
  *   public function length( $value = null ) {
  *     ( new GetterSetterAccessor( $this ) )
- *       ->access( 'length' )
- *       ->defaultValue( function() {
+ *       ->property( 'length' )
+ *       ->initially( function() {
  *           return new Length( 20 );
  *       } )
  *       ->run( $value )
@@ -51,7 +51,7 @@ class GetterSetterAccessor {
 	 *        constructor. Might even be a private property.
 	 * @return GetterSetterAccessorPropertyInteractor
 	 */
-	public function access( $propertyName ) {
+	public function property( $propertyName ) {
 		return new GetterSetterAccessorPropertyInteractor( $this->instance, $propertyName );
 	}
 }

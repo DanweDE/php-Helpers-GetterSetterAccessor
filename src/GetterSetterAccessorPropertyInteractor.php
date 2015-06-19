@@ -7,7 +7,7 @@ use ReflectionProperty;
 use ReflectionException;
 
 /**
- * Helper for GetterSetterAccessor. Normally GetterSetterAccessor should be used whose "access"
+ * Helper for GetterSetterAccessor. Normally GetterSetterAccessor should be used whose "property"
  * method will return an instance of this one, allowing for more expressive code.
  *
  * @since 1.0.0
@@ -66,7 +66,7 @@ class GetterSetterAccessorPropertyInteractor {
 	 *
 	 * @throws InvalidArgumentException If $defaultReturningCallback is not callable.
 	 */
-	public function defaultValue( $defaultReturningCallback ) {
+	public function initially( $defaultReturningCallback ) {
 		if( ! is_callable( $defaultReturningCallback ) ) {
 			throw new InvalidArgumentException( '$defaultReturningCallback must be callable' );
 		}

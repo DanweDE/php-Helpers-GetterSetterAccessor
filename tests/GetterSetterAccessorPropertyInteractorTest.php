@@ -43,8 +43,8 @@ class GetterSetterAccessorPropertyInteractorTest extends \PHPUnit_Framework_Test
 		new GetterSetterAccessorPropertyInteractor( new \DateTime(), $value );
 	}
 
-	public function testSetDefaultValue() {
-		$this->newInstance()->defaultValue( function() { return 42; } );
+	public function testInitially() {
+		$this->newInstance()->initially( function() { return 42; } );
 	}
 
 	/**
@@ -52,8 +52,8 @@ class GetterSetterAccessorPropertyInteractorTest extends \PHPUnit_Framework_Test
 	 *
 	 * @expectedException InvalidArgumentException
 	 */
-	public function testSetDefaultValueWithInvalidValues( $value ) {
-		$this->newInstance()->defaultValue( $value );
+	public function testInitiallyWithInvalidValues( $value ) {
+		$this->newInstance()->initially( $value );
 	}
 
 	/**
@@ -86,7 +86,7 @@ class GetterSetterAccessorPropertyInteractorTest extends \PHPUnit_Framework_Test
 			$instance,
 			$property
 		);
-		$getSet->defaultValue( function() use( $value ) {
+		$getSet->initially( function() use( $value ) {
 			return $value;
 		} );
 		$this->assertSame( $value, $getSet->run( null ),

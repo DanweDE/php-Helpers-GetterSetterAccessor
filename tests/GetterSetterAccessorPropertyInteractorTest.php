@@ -43,18 +43,17 @@ class GetterSetterAccessorPropertyInteractorTest extends \PHPUnit_Framework_Test
 		new GetterSetterAccessorPropertyInteractor( $object, $nonExistentProperty );
 	}
 
-	public function testInitially() {
+	public function testInitiallyWithCallback() {
 		$instance = $this->newInstance();
 		$this->assertSame( $instance, $instance->initially( function() { return 42; } ) );
 	}
 
 	/**
 	 * @dataProvider Danwe\DataProviders\DifferentTypesValues::oneOfEachTypeProvider
-	 *
-	 * @expectedException InvalidArgumentException
 	 */
-	public function testInitiallyWithInvalidValues( $value ) {
-		$this->newInstance()->initially( $value );
+	public function testInitiallyWithNonCallback( $value ) {
+		$instance = $this->newInstance();
+		$this->assertSame( $instance, $instance->initially( $value ) );
 	}
 
 	/**

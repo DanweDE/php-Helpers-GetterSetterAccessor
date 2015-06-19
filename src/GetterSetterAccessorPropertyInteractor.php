@@ -5,6 +5,7 @@ use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionProperty;
 use ReflectionException;
+use Closure;
 
 /**
  * Helper for GetterSetterAccessor. Normally GetterSetterAccessor should be used whose "property"
@@ -28,9 +29,9 @@ class GetterSetterAccessorPropertyInteractor {
 	protected $propertyName;
 
 	/**
-	 * @var callable
+	 * @var mixed|callable
 	 */
-	protected $defaultReturningCallback;
+	protected $defaultReturningCallbackOrValue = null;
 
 	/**
 	 * @var ReflectionProperty
@@ -58,21 +59,18 @@ class GetterSetterAccessorPropertyInteractor {
 	}
 
 	/**
-	 * Allows to give a callback called in case the getter is being called before the setter,
-	 * allowing to dynamically supply a complex default value.
-	 * The function will only be called once, the returned value will then be assigned to the
-	 * subject property.
+	 * Allows to define a value or value returning callback used in case the getter is being called
+	 * before the setter, allowing to supply a complex default value.
+	 * Performance wise a callback is preferred in case of objects being returned as default since
+	 * they will only be constructed once and if the fallback is really required.
 	 *
-	 * @param callable $defaultReturningCallback
+	 * @param mixed|callable $defaultReturningCallbackOrValue
 	 * @return $this
 	 *
-	 * @throws InvalidArgumentException If $defaultReturningCallback is not callable.
+	 * @throws InvalidArgumentException If $defaultReturningCallbackOrValue is not callable.
 	 */
-	public function initially( $defaultReturningCallback ) {
-		if( ! is_callable( $defaultReturningCallback ) ) {
-			throw new InvalidArgumentException( '$defaultReturningCallback must be callable' );
-		}
-		$this->defaultReturningCallback = $defaultReturningCallback;
+	public function initially( $defaultReturningCallbackOrValue ) {
+		$this->defaultReturningCallbackOrValue = $defaultReturningCallbackOrValue;
 		return $this;
 	}
 
@@ -95,13 +93,20 @@ class GetterSetterAccessorPropertyInteractor {
 	protected function getValue() {
 		$returnValue = $this->reflectionProperty->getValue( $this->instance );
 
-		if( $returnValue === null && $this->defaultReturningCallback !== null ) {
-			$returnValue = call_user_func( $this->defaultReturningCallback );
+		if( $returnValue === null ) {
+			$returnValue = $this->getInitialValue();
 			if( $returnValue !== null ) {
-				$this->getOrSet( $returnValue );
+				$this->setValue( $returnValue );
 			}
 		}
 		return $returnValue;
+	}
+
+	protected function getInitialValue() {
+		if( $this->defaultReturningCallbackOrValue instanceof Closure ) {
+			return call_user_func( $this->defaultReturningCallbackOrValue );
+		}
+		return $this->defaultReturningCallbackOrValue;
 	}
 
 	protected function setValue( $value ) {

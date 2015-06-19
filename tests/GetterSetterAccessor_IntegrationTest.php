@@ -21,14 +21,14 @@ class GetterSetterAccessor_IntegrationTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * @dataProvider implementationsOfCombinedSetterGetterMethodsProvider
 	 */
-	public function testRunAsGetterWithNonNullValues( $instance, $defaultsPerMethod ) {
+	public function testRunAsGetterWithNonNullValues( GetterSetterTestObject $instance, $defaultsPerMethod ) {
 		foreach( DifferentTypesValues::oneOfEachTypeProvider( 'test_with_non_null_values' ) as $case ) {
 			list( $value, $type ) = $case;
 
 			$method = 'some' . ucfirst( $type );
 			$default = $defaultsPerMethod[ $method ];
 
-			$this->assertEquals( $default, $instance->$method(),
+			$this->assertSame( $default, $instance->$method(),
 				"\$instance->$method() (getter) returns expected initial value" );
 
 			$this->assertSame( $instance, $instance->$method( $value ),
@@ -39,6 +39,9 @@ class GetterSetterAccessor_IntegrationTest extends \PHPUnit_Framework_TestCase {
 		}
 	}
 
+	/**
+	 * @return array( array( GetterSetterTestObject $instance, mixed[] $defaultsPerMethod ), ... )
+	 */
 	public function implementationsOfCombinedSetterGetterMethodsProvider() {
 		$initialValues = array(
 			'someBoolean' => null,
@@ -59,8 +62,8 @@ class GetterSetterAccessor_IntegrationTest extends \PHPUnit_Framework_TestCase {
 		$getSet = new GetterSetterAccessor( $mockedObject );
 
 		foreach( $initialValues as $valueMethod => $initialValue ) {
-			$mockedObject->method( $valueMethod )
-				->will( $this->returnCallback( function( $value = null ) use( $getSet, $valueMethod, $initialValue ) {
+			$getOrSetHandler =
+				function( $value = null ) use( $getSet, $valueMethod, $initialValue ) {
 					$propGetSet = $getSet->property( $valueMethod );
 
 					if( $initialValue ) {
@@ -69,7 +72,10 @@ class GetterSetterAccessor_IntegrationTest extends \PHPUnit_Framework_TestCase {
 						} );
 					}
 					return $propGetSet->getOrSet( $value );
-				} ) );
+				};
+
+			$mockedObject->method( $valueMethod )
+				->will( $this->returnCallback( $getOrSetHandler ) );
 		}
 
 		return array(

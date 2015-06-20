@@ -18,6 +18,10 @@ use Closure;
  */
 class GetterSetterAccessorPropertyInteractor {
 
+	protected static $acceptedTypes = array(
+		'boolean', 'integer', 'double', 'string', 'array', 'object', 'resource', 'mixed'
+	);
+
 	/**
 	 * @var mixed
 	 */
@@ -27,6 +31,11 @@ class GetterSetterAccessorPropertyInteractor {
 	 * @var string
 	 */
 	protected $propertyName;
+
+	/**
+	 * @var string
+	 */
+	protected $expectedValueType = 'mixed';
 
 	/**
 	 * @var mixed|callable
@@ -59,6 +68,33 @@ class GetterSetterAccessorPropertyInteractor {
 	}
 
 	/**
+	 * Allows to specify the type a value given to getOrSet() is expected to be of.
+	 * Allows types as returned by PHP's gettype() (see http://php.net/manual/en/function.gettype.php)
+	 * except for 'NULL' because calling getOrSet( null ) would invoke getter, not setter.
+	 * Allows the aliases "float" for "double" and the shorthands "int" and "bool" and the special
+	 * type 'mixed' which is the default and stands for any arbitrary type.
+	 *
+	 * @param string $type
+	 * @return $this
+	 *
+	 * @throws InvalidArgumentException If given type is not known.
+	 */
+	public function ofType( $type ) {
+		if( $type === 'float' ) {
+			$type = 'double';
+		} else if( $type === 'bool' ) {
+			$type = 'boolean';
+		} else if( $type === 'int' ) {
+			$type = 'integer';
+		}
+		if( ! in_array( $type, static::$acceptedTypes ) ) {
+			throw new InvalidArgumentException( "unknown type $type" );
+		}
+		$this->expectedValueType = $type;
+		return $this;
+	}
+
+	/**
 	 * Allows to define a value or value returning callback used in case the getter is being called
 	 * before the setter, allowing to supply a complex default value.
 	 * Performance wise a callback is preferred in case of objects being returned as default since
@@ -86,6 +122,7 @@ class GetterSetterAccessorPropertyInteractor {
 		if( $value === null ) {
 			return $this->getValue();
 		}
+		$this->assertValueOfRightType( $value );
 		$this->setValue( $value );
 		return $this->instance;
 	}
@@ -111,6 +148,14 @@ class GetterSetterAccessorPropertyInteractor {
 
 	protected function setValue( $value ) {
 		$this->reflectionProperty->setValue( $this->instance, $value );
+	}
+
+	protected function assertValueOfRightType( $value ) {
+		if( $this->expectedValueType !== 'mixed'
+			&& gettype( $value ) !== $this->expectedValueType
+		) {
+			throw new InvalidArgumentException( "value has to be of type {$this->expectedValueType}" );
+		}
 	}
 
 	/**

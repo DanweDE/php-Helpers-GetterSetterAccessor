@@ -9,7 +9,7 @@ use InvalidArgumentException;
  *
  * @example <code>
  * class Foo {
- *   public function length( $value = null ) {
+ *   public function length( Length $value = null ) {
  *     ( new GetterSetterAccessor( $this ) )
  *       ->property( 'length' )
  *       ->initially( function() {

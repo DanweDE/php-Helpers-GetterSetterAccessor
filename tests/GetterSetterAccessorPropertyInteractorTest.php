@@ -1,6 +1,7 @@
 <?php
 namespace Danwe\Helpers\Tests;
 
+use Danwe\DataProviders\DifferentTypesValues;
 use Danwe\Helpers\Tests\TestHelpers\GetterSetterObject as GetterSetterTestObject;
 use Danwe\Helpers\GetterSetterAccessorPropertyInteractor;
 
@@ -43,6 +44,14 @@ class GetterSetterAccessorPropertyInteractorTest extends \PHPUnit_Framework_Test
 		new GetterSetterAccessorPropertyInteractor( $object, $nonExistentProperty );
 	}
 
+	/**
+	 * @dataProvider typesAndValuesProvider
+	 */
+	public function testOfType( $type, $validValues, $invalidValues ) {
+		$instance = $this->newInstance();
+		$this->assertSame( $instance, $instance->ofType( $type ), 'returns self reference' );
+	}
+
 	public function testInitiallyWithCallback() {
 		$instance = $this->newInstance();
 		$this->assertSame( $instance, $instance->initially( function() { return 42; } ) );
@@ -53,13 +62,13 @@ class GetterSetterAccessorPropertyInteractorTest extends \PHPUnit_Framework_Test
 	 */
 	public function testInitiallyWithNonCallback( $value ) {
 		$instance = $this->newInstance();
-		$this->assertSame( $instance, $instance->initially( $value ) );
+		$this->assertSame( $instance, $instance->initially( $value ), 'returns self reference' );
 	}
 
 	/**
 	 * @dataProvider Danwe\DataProviders\DifferentTypesValues::oneOfEachTypeProvider
 	 */
-	public function testRunGettingAndSettingWithNonNullValues( $value, $type ) {
+	public function testGetOrSetGettingAndSettingWithNonNullValues( $value, $type ) {
 		$instance = new GetterSetterTestObject();
 		$property = 'some' . ucfirst( $type );
 		$getSet = new GetterSetterAccessorPropertyInteractor(
@@ -77,9 +86,37 @@ class GetterSetterAccessorPropertyInteractorTest extends \PHPUnit_Framework_Test
 	}
 
 	/**
+	 * @dataProvider typesAndValuesProvider
+	 */
+	public function testGetOrSetSettingRespectsOfTypeConfiguration( $type, $validValues, $invalidValues ) {
+		$instance = new GetterSetterTestObject();
+		$getSet = new GetterSetterAccessorPropertyInteractor( $instance, 'publicValue' );
+		$getSet->ofType( $type );
+
+		foreach( $validValues as $validValue ) {
+			$this->assertSame( $instance, $getSet->getOrSet( $validValue ),
+				'getOrSet( $value ) (setter) returns self reference' );
+
+			$this->assertSame( $validValue, $getSet->getOrSet( null ),
+				"getOrSet( null ) (getter) returns value previously set" );
+		}
+
+		foreach( $invalidValues as $invalidValue ) {
+			$caught = false;
+			try {
+				$getSet->getOrSet( $invalidValue );
+			} catch( \InvalidArgumentException $e ) {
+				$caught = true;
+			}
+			$this->assertTrue( $caught, 'setting value of wrong type \"' . gettype( $invalidValue )
+				. '\" throws InvalidArgumentException' );
+		}
+	}
+
+	/**
 	 * @dataProvider Danwe\DataProviders\DifferentTypesValues::oneOfEachTypeProvider
 	 */
-	public function testRunAsGetterGettingDefaultWithNonNullValues( $value, $type ) {
+	public function testGetOrSetAsGetterGettingDefaultWithNonNullValues( $value, $type ) {
 		$instance = new GetterSetterTestObject();
 		$property = 'some' . ucfirst( $type );
 		$getSet = new GetterSetterAccessorPropertyInteractor(
@@ -93,7 +130,7 @@ class GetterSetterAccessorPropertyInteractorTest extends \PHPUnit_Framework_Test
 			"getOrSet( null ) (getter) returns value defined as default" );
 	}
 
-	public function testRunCanAccessPrivateInstanceProperty() {
+	public function testGetOrSetCanAccessPrivateInstanceProperty() {
 		$instance = new GetterSetterTestObject();
 		$privateProperty = 'privateValue';
 		$getSet = new GetterSetterAccessorPropertyInteractor(
@@ -118,7 +155,7 @@ class GetterSetterAccessorPropertyInteractorTest extends \PHPUnit_Framework_Test
 	 * @return GetterSetterAccessorPropertyInteractor
 	 */
 	protected function newInstance() {
-		return new GetterSetterAccessorPropertyInteractor( new GetterSetterTestObject(), 'someString' );
+		return new GetterSetterAccessorPropertyInteractor( new GetterSetterTestObject(), 'publicValue' );
 	}
 
 	/**
@@ -132,6 +169,41 @@ class GetterSetterAccessorPropertyInteractorTest extends \PHPUnit_Framework_Test
 			'protected property' => array( new GetterSetterTestObject(), 'protectedValue' ),
 			'private property' => array( new GetterSetterTestObject(), 'privateValue' ),
 		);
+	}
+
+	public static function typesAndValuesProvider() {
+		foreach( DifferentTypesValues::oneOfEachTypeProvider() as $provided ) {
+			list( $value, $type ) = $provided;
+
+			$cases[ $type ] = array(
+				'type' => $type,
+				'valid' => array( $value ),
+				'invalid' => self::flattenProviderCasesAndRemoveNull(
+					DifferentTypesValues::oneOfEachTypeProvider( "test_with_non_{$type}_values" ) ),
+			);
+		}
+		$cases[ 'int' ] = $cases[ 'integer' ];
+		$cases[ 'bool' ] = $cases[ 'boolean' ];
+		$cases[ 'float' ] = $cases[ 'double' ];
+		$cases[ 'mixed' ] = array(
+			'type' => 'mixed',
+			'valid' => self::flattenProviderCasesAndRemoveNull(
+				DifferentTypesValues::oneOfEachTypeProvider() ),
+			'invalid' => array(),
+		);
+		unset( $cases[ 'NULL' ] ); // wouldn't make much sense since null is reserved to trigger getter
+
+		return $cases;
+	}
+
+	private static function flattenProviderCasesAndRemoveNull( $cases ) {
+		foreach( $cases as $case ) {
+			if( $case[ 0 ] === null ) {
+				continue;
+			}
+			$flattened[] = $case[ 0 ];
+		}
+		return $flattened;
 	}
 }
 

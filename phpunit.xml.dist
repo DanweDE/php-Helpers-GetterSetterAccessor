@@ -15,7 +15,7 @@
 	verbose="true"
 >
 	<testsuites>
-		<testsuite name="helpers-gettersetteraccessor Test Suite">
+		<testsuite name="Danwe's helpers-gettersetteraccessor Test Suite">
 			<directory suffix="Test.php">./tests/</directory>
 		</testsuite>
 	</testsuites>

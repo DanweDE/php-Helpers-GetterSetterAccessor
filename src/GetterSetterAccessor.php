@@ -10,7 +10,7 @@ use InvalidArgumentException;
  * @example <code>
  * class Foo {
  *   public function length( Length $value = null ) {
- *     ( new GetterSetterAccessor( $this ) )
+ *     return ( new GetterSetterAccessor( $this ) )
  *       ->property( 'length' )
  *       ->initially( function() {
  *           return new Length( 20 );

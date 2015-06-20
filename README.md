@@ -51,9 +51,17 @@ class Options {
 
 ## Performance Implications
 You should be aware that `GetterSetterAccessor` is using PHP's reflection facilities internally
-to set/get property values. This is expected to be a few times slower than setting the property
-directly but shouldn't be of any real concern unless you are expecting a method to be called
-several hundred thousand times.
+to set/get property values.
+
+This package contains a benchmark to test the performance implications. It ran be run via:
+```
+php ./vendor/bin/athletic -p ./benchmarks
+```
+
+The benchmark result indicated that using `GetterSetterAccessor` is three to four times slower than
+using hard coded methods doing the same thing (this might vary depending on the PHP version and
+the system). If a method is expected to be called several thousand times than this could become an
+actual concern.
 
 ## TODOs
 * Allow to set more than one type for `ofType`.

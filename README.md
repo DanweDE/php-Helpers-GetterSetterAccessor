@@ -39,7 +39,7 @@ class Options {
   public function length( $value = null ) {
     return $this->getterSetter( __FUNCTION__ )
       ->ofType( 'int' )
-      ->initially( 42 ) // Equivalent to declaring "protected $length = 42" in the class
+      ->initially( 42 ) // Equivalent to declaring "protected $length = 42" on top
       ->getOrSet( $value );
   }
 
@@ -62,11 +62,11 @@ php vendor/bin/athletic -p benchmarks
 ```
 Example output:
 ```
-Method Name                                   Iterations   Average Time      Ops/second   
--------------------------------------------- ------------ ----------------- ---------------
-hardCodedSetterGetter                      : [     6,000] [0.0000072908004] [137,159.15173]
-setterGetterUsingThisLibrary_normalUsage   : [     6,000] [0.0000241236687] [41,453.06477 ]
-setterGetterUsingThisLibrary_extensiveUsage: [     6,000] [0.0000284811258] [35,110.97159 ]
+Method Name                                 Iterations   Average Time      Ops/sec   
+------------------------------------------- ----------- ----------------- ---------
+hardCodedSetterGetter                      : [   6,000] [0.0000072908004] [137,159]
+setterGetterUsingThisLibrary_normalUsage   : [   6,000] [0.0000241236687] [ 41,453]
+setterGetterUsingThisLibrary_extensiveUsage: [   6,000] [0.0000284811258] [ 35,110]
 ```
 
 The benchmark result indicated that using `GetterSetterAccessor` is three to four times slower than

@@ -1,13 +1,13 @@
 # php-Helpers-GetterSetterAccessor
 Helper class offering functionality to define combined getter and setter class methods with a minimum of expressive code. An example for a "combined getter and setter" would be `User::age( $age=null )` for getting or setting an user's age instead of having two separate methods `User::getAge()` and `User::setAge( $age )`.
 
-[![Latest Stable Version](https://poser.pugx.org/danwe/helpers-settergetteraccessor/version.png)](https://packagist.org/packages/danwe/helpers-settergetteraccessor)
+[![Latest Stable Version](https://poser.pugx.org/danwe/helpers-gettersetteraccessor/version.png)](https://packagist.org/packages/danwe/helpers-gettersetteraccessor)
 [![Build Status](https://travis-ci.org/DanweDE/php-Helpers-SetterGetterAccessor.svg)](https://travis-ci.org/DanweDE/php-Helpers-SetterGetterAccessor)
 [![Coverage Status](https://coveralls.io/repos/DanweDE/php-Helpers-SetterGetterAccessor/badge.svg)](https://coveralls.io/r/DanweDE/php-Helpers-SetterGetterAccessor)
-[![Download count](https://poser.pugx.org/danwe/helpers-settergetteraccessor/d/total.png)](https://packagist.org/packages/danwe/helpers-settergetteraccessor)
+[![Download count](https://poser.pugx.org/danwe/helpers-gettersetteraccessor/d/total.png)](https://packagist.org/packages/danwe/helpers-gettersetteraccessor)
 
 ## Disclaimer
-This library does in no way suggest that combined getters and setters are superior to having separate methods. There might be use cases where each way has certain advantages and disatvantages. Choosing one might often just be a question of the developer's own taste of style.
+This library is in no way suggesting that combined getters and setters are superior to having separate methods. There might be use cases where each way has certain advantages and disatvantages. Choosing one might often just be a question of the developer's own taste of style.
 
 ## Usage
 See the following usage example:

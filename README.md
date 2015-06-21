@@ -3,7 +3,7 @@ Helper class offering functionality to define setter and getter class methods wi
 
 [![Latest Stable Version](https://poser.pugx.org/danwe/helpers-settergetteraccessor/version.png)](https://packagist.org/packages/danwe/helpers-settergetteraccessor)
 [![Build Status](https://travis-ci.org/DanweDE/php-Helpers-SetterGetterAccessor.svg)](https://travis-ci.org/DanweDE/php-Helpers-SetterGetterAccessor)
-[![Coverage Status](https://coveralls.io/repos/DanweDE/php-Helpers-SetterGetterAccessor/badge.svg)](https://coveralls.io/r/DanweDE/php-Helpers-SetterGetterAccessor)
+[![Coverage Status](https://coveralls.io/repos/DanweDE/php-helpers-settergetterhelper/badge.svg)](https://coveralls.io/r/DanweDE/php-helpers-settergetterhelper)
 [![Download count](https://poser.pugx.org/danwe/helpers-settergetteraccessor/d/total.png)](https://packagist.org/packages/danwe/helpers-settergetteraccessor)
 
 ## Usage

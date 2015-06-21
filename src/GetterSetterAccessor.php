@@ -63,7 +63,7 @@ class GetterSetterAccessor {
 	 * @param object $instance
 	 * @param string $propertyName
 	 *
-	 * @return mixed
+	 * @return GetterSetterAccessorPropertyInteractor
 	 */
 	public static function access( $instance, $propertyName ) {
 		$accessor = new static( $instance );

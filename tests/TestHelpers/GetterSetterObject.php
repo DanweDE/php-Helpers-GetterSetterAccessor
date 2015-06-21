@@ -1,6 +1,8 @@
 <?php
 namespace Danwe\Helpers\Tests\TestHelpers;
 
+use Doctrine\Instantiator\Exception\InvalidArgumentException;
+
 /**
  * Class designed mainly for GetterSetterAccessorIntegrationTest.
  *
@@ -29,38 +31,41 @@ class GetterSetterObject {
 	}
 
 	public function someBoolean( $value = null ) {
-		return $this->getAndSet( __FUNCTION__, $value );
+		return $this->getAndSet( __FUNCTION__, $value, 'is_bool' );
 	}
 
 	public function someInteger( $value = null ) {
-		return $this->getAndSet( __FUNCTION__, $value );
+		return $this->getAndSet( __FUNCTION__, $value, 'is_integer' );
 	}
 
 	public function someDouble( $value = null ) {
-		return $this->getAndSet( __FUNCTION__, $value );
+		return $this->getAndSet( __FUNCTION__, $value, 'is_double' );
 	}
 
 	public function someString( $value = null ) {
-		return $this->getAndSet( __FUNCTION__, $value );
+		return $this->getAndSet( __FUNCTION__, $value, 'is_string' );
 	}
 
 	public function someObject( $value = null ) {
-		return $this->getAndSet( __FUNCTION__, $value );
+		return $this->getAndSet( __FUNCTION__, $value, 'is_object' );
 	}
 
 	public function someArray( $value = null ) {
-		return $this->getAndSet( __FUNCTION__, $value );
+		return $this->getAndSet( __FUNCTION__, $value, 'is_array' );
 	}
 
 	public function getPrivateValue() {
 		return $this->privateValue;
 	}
 
-	private function getAndSet( $property, $value ) {
+	private function getAndSet( $property, $value, $typeCheck ) {
 		if( $value === null ) { // GETTER:
 			return $this->{ $property };
 		}
 		// SETTER:
+		if( ! $typeCheck( $value ) ) {
+			throw new InvalidArgumentException( "$value does not pass $typeCheck" );
+		}
 		$this->{ $property } = $value;
 		return $this;
 	}

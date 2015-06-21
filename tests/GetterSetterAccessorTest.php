@@ -62,10 +62,8 @@ class GetterSetterAccessorTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testAccess( $object, $objectsProperty ) {
 		$this->assertInstanceOf(
-			'Danwe\Helpers\GetterSetterAccessorPropertyInteractor',
-			GetterSetterAccessor::access( $object, $objectsProperty ),
-			"GetterSetterAccessor::access( \$object, '$objectsProperty' ) returns a "
-				. "GetterSetterAccessorPropertyInteractor instance"
+			'Danwe\Helpers\GetterSetterAccessor',
+			GetterSetterAccessor::access( $object )
 		);
 	}
 

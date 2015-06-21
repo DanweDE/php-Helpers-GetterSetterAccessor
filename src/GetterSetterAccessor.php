@@ -56,17 +56,16 @@ class GetterSetterAccessor {
 	}
 
 	/**
-	 * Equivalent to
+	 * Usage of this function as
+	 *   GetterSetterAccessor::access( $instance )->property( $propertyName ) ...
+	 * is equivalent to
 	 *   ( new GetterSetterAccessor( $instance ) )->property( $propertyName ) ...
 	 * but usable with PHP 5.3 while the above is not.
 	 *
 	 * @param object $instance
-	 * @param string $propertyName
-	 *
-	 * @return GetterSetterAccessorPropertyInteractor
+	 * @return GetterSetterAccessor
 	 */
-	public static function access( $instance, $propertyName ) {
-		$accessor = new static( $instance );
-		return $accessor->property( $propertyName );
+	public static function access( $instance ) {
+		return new static( $instance );
 	}
 }

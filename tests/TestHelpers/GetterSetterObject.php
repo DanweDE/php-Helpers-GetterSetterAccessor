@@ -54,6 +54,12 @@ class GetterSetterObject {
 		return $this->getAndSet( __FUNCTION__, $value, 'is_array' );
 	}
 
+	/**
+	 * Returns the private "privateValue" property of the instance. This property will not be
+	 * touched by the class's code itself so it can only be set via reflection.
+	 *
+	 * @return mixed
+	 */
 	public function getPrivateValue() {
 		return $this->privateValue;
 	}
@@ -64,7 +70,7 @@ class GetterSetterObject {
 		}
 		// SETTER:
 		if( ! $typeCheck( $value ) ) {
-			throw new InvalidArgumentException( "$value does not pass $typeCheck" );
+			throw new InvalidArgumentException( "\$value does not pass $typeCheck" );
 		}
 		$this->{ $property } = $value;
 		return $this;

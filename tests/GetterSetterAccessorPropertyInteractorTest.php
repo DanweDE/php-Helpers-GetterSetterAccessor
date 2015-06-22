@@ -4,6 +4,7 @@ namespace Danwe\Helpers\Tests;
 use Danwe\DataProviders\DifferentTypesValues;
 use Danwe\Helpers\Tests\TestHelpers\GetterSetterObject as GetterSetterTestObject;
 use Danwe\Helpers\GetterSetterAccessorPropertyInteractor;
+use InvalidArgumentException;
 
 /**
  * @covers Danwe\Helpers\GetterSetterAccessorPropertyInteractor
@@ -50,6 +51,14 @@ class GetterSetterAccessorPropertyInteractorTest extends \PHPUnit_Framework_Test
 	public function testOfType( $type, $validValues, $invalidValues ) {
 		$instance = $this->newInstance();
 		$this->assertSame( $instance, $instance->ofType( $type ), 'returns self reference' );
+	}
+
+	/**
+	 * @expectedException InvalidArgumentException
+	 */
+	public function testOfTypeWithInvalidType() {
+		$instance = $this->newInstance();
+		$instance->ofType( 'some_non_existent_type' );
 	}
 
 	public function testInitiallyWithCallback() {
@@ -105,7 +114,7 @@ class GetterSetterAccessorPropertyInteractorTest extends \PHPUnit_Framework_Test
 			$caught = false;
 			try {
 				$getSet->getOrSet( $invalidValue );
-			} catch( \InvalidArgumentException $e ) {
+			} catch( InvalidArgumentException $e ) {
 				$caught = true;
 			}
 			$this->assertTrue( $caught, 'setting value of wrong type \"' . gettype( $invalidValue )
@@ -152,6 +161,16 @@ class GetterSetterAccessorPropertyInteractorTest extends \PHPUnit_Framework_Test
 	}
 
 	/**
+	 * @expectedException Danwe\Helpers\GetterSetterAccessorIllegalPropertyException
+	 */
+	public function testGetOrSetWithIllegalProperty() {
+		new GetterSetterAccessorPropertyInteractor(
+			new GetterSetterTestObject(),
+			'someNonExistentPropertyToTriggerTheError'
+		);
+	}
+
+	/**
 	 * @return GetterSetterAccessorPropertyInteractor
 	 */
 	protected function newInstance() {
@@ -183,8 +202,14 @@ class GetterSetterAccessorPropertyInteractorTest extends \PHPUnit_Framework_Test
 			);
 		}
 		$cases[ 'int' ] = $cases[ 'integer' ];
+		$cases[ 'int' ][ 'type' ] = 'int';
+
 		$cases[ 'bool' ] = $cases[ 'boolean' ];
+		$cases[ 'bool' ][ 'type' ] = 'bool';
+
 		$cases[ 'float' ] = $cases[ 'double' ];
+		$cases[ 'float' ][ 'type' ] = 'float';
+
 		$cases[ 'mixed' ] = array(
 			'type' => 'mixed',
 			'valid' => self::flattenProviderCasesAndRemoveNull(

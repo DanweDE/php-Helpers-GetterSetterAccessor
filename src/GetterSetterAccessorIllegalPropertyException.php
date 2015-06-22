@@ -2,6 +2,7 @@
 namespace Danwe\Helpers;
 
 use LogicException;
+use InvalidArgumentException;
 
 /**
  * Indicates that a property name used with GetterSetterAccessorPropertyInteractor does not exist
@@ -48,7 +49,7 @@ class GetterSetterAccessorIllegalPropertyException extends LogicException {
 	 * @return string
 	 */
 	public function getIllegalProperty() {
-		return $this->unknownType;
+		return $this->illegalProperty;
 	}
 
 	/**

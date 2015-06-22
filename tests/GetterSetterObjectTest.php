@@ -3,7 +3,7 @@ namespace Danwe\Helpers\Tests;
 
 use Danwe\Helpers\Tests\TestHelpers\GetterSetterObject;
 use DateTime;
-use Doctrine\Instantiator\Exception\InvalidArgumentException;
+use InvalidArgumentException;
 
 /**
  * @covers Danwe\Helpers\Tests\TestHelpers\GetterSetterObject

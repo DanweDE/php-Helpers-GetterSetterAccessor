@@ -44,6 +44,7 @@ class GetterSetterAccessorIllegalPropertyExceptionTest extends \PHPUnit_Framewor
 	 * @dataProvider Danwe\DataProviders\DifferentTypesValues::oneOfEachTypeProvider
 	 *
 	 * @expectedException InvalidArgumentException
+	 * @expectedExceptionMessageRegExp !has to be a string!
 	 */
 	public function testConstructionWithIllegalPropertyArgumentWithNonStringValues( $value ) {
 		new GSAIPException(
@@ -56,6 +57,7 @@ class GetterSetterAccessorIllegalPropertyExceptionTest extends \PHPUnit_Framewor
 	 * @dataProvider Danwe\DataProviders\DifferentTypesValues::oneOfEachTypeProvider
 	 *
 	 * @expectedException InvalidArgumentException
+	 * @expectedExceptionMessageRegExp !has to be an object!
 	 */
 	public function testConstructionWithInstanceArgumentWithNonObjectValues( $value ) {
 		new GSAIPException(

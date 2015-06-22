@@ -14,16 +14,49 @@ use Danwe\Helpers\Tests\TestHelpers\GetterSetterObject;
  */
 class GetterSetterAccessorIllegalPropertyExceptionTest extends \PHPUnit_Framework_TestCase {
 
+	protected $someObject;
+
+	/**
+	 * @see PHPUnit_Framework_TestCase::setUp()
+	 */
+	public function setUp() {
+		$this->someObject = new GetterSetterObject();
+	}
+
 	public function testConstruction() {
 		$instance = new GSAIPException(
 			'privateValue',
-			new GetterSetterObject()
+			$this->someObject
 		);
 		$this->assertInstanceOf(
 			'Danwe\Helpers\GetterSetterAccessorIllegalPropertyException',
 			$instance
 		);
 		return $instance;
+	}
+
+	/**
+	 * @dataProvider Danwe\DataProviders\DifferentTypesValues::oneOfEachTypeProvider
+	 *
+	 * @expectedException InvalidArgumentException
+	 */
+	public function testConstructionWithIllegalPropertyArgumentWithNonStringValues( $value ) {
+		new GSAIPException(
+			$value,
+			$this->someObject
+		);
+	}
+
+	/**
+	 * @dataProvider Danwe\DataProviders\DifferentTypesValues::oneOfEachTypeProvider
+	 *
+	 * @expectedException InvalidArgumentException
+	 */
+	public function testConstructionWithInstanceArgumentWithNonStringValues( $value ) {
+		new GSAIPException(
+			$value,
+			$this->someObject
+		);
 	}
 
 	/**
@@ -37,10 +70,9 @@ class GetterSetterAccessorIllegalPropertyExceptionTest extends \PHPUnit_Framewor
 	 * @depends testConstruction
 	 */
 	public function testGetInstance( GSAIPException $instance ) {
-		$instance = new GetterSetterObject();
-		$exception = new GSAIPException( 'privateValue', $instance );
+		$exception = new GSAIPException( 'privateValue', $this->someObject );
 
-		$this->assertSame( $instance, $exception->getInstance() );
+		$this->assertSame( $this->someObject, $exception->getInstance() );
 	}
 }
 

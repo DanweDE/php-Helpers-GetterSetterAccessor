@@ -8,7 +8,7 @@ use InvalidArgumentException;
 /**
  * @covers Danwe\Helpers\Tests\TestHelpers\GetterSetterObject
  *
- * @since 1.0.0
+ * @since 1.0.1
  *
  * @licence MIT License
  * @author Daniel A. R. Werner

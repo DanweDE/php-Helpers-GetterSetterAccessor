@@ -46,6 +46,8 @@ class GetterSetterAccessorIllegalPropertyException extends LogicException {
 	}
 
 	/**
+	 * @since 1.0.1 (always threw an exception in 1.0.0)
+	 *
 	 * @return string
 	 */
 	public function getIllegalProperty() {

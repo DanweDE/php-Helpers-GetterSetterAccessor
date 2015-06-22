@@ -3,7 +3,7 @@ Helper class offering functionality to define combined getter and setter class m
 
 [![Latest Stable Version](https://poser.pugx.org/danwe/helpers-gettersetteraccessor/version.png)](https://packagist.org/packages/danwe/helpers-gettersetteraccessor)
 [![Build Status](https://travis-ci.org/DanweDE/php-Helpers-GetterSetterAccessor.svg)](https://travis-ci.org/DanweDE/php-Helpers-SetterGetterAccessor)
-[![Coverage Status](https://coveralls.io/repos/DanweDE/php-Helpers-GetterSetterAccessor/badge.svg)](https://coveralls.io/r/DanweDE/php-Helpers-SetterGetterAccessor)
+[![Coverage Status](https://coveralls.io/repos/DanweDE/php-Helpers-GetterSetterAccessor/badge.svg)](https://coveralls.io/r/DanweDE/php-Helpers-GetterSetterAccessor)
 [![Download count](https://poser.pugx.org/danwe/helpers-gettersetteraccessor/d/total.png)](https://packagist.org/packages/danwe/helpers-gettersetteraccessor)
 
 ## Disclaimer

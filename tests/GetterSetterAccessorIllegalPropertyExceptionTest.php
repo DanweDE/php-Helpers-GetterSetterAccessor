@@ -5,7 +5,7 @@ use Danwe\Helpers\GetterSetterAccessorIllegalPropertyException as GSAIPException
 use Danwe\Helpers\Tests\TestHelpers\GetterSetterObject;
 
 /**
- * @covers Danwe\Helpers\GetterSetterAccessor
+ * @covers Danwe\Helpers\GetterSetterAccessorIllegalPropertyException
  *
  * @since 1.0.0
  *
